@@ -8,7 +8,7 @@ Users will be shown/dealt the two initial cards that make up their hand. Then du
 
 After all three rounds, the user is given a report about the correctness of their assumptions during the stages.
 
-## Coming Soon - As of January 2019
+## Coming Soon - As of January 2017
 
 - GUI for a more intuitive use.
 
