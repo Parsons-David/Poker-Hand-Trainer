@@ -60,7 +60,7 @@ public class Card {
 
   //
   public Image getGraphic() {
-      return this.graphic; 
+      return this.graphic;
   }
 
   public String toString(){
@@ -79,6 +79,15 @@ public class Card {
 
   public void flip(){
     this.faceUp = !this.faceUp;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if(!(obj instanceof Card)){
+      return false;
+    }
+    Card e = (Card) obj;
+    return (this == null ? e == null : (this.suit == e.suit) && (this.face == e.face));
   }
 
 }
