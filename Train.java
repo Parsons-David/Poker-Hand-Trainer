@@ -1,10 +1,16 @@
 public class Train{
 
   public static void main(String[] args) {
-    for(int i = 0; i < 4; i++){
-      for(int j = 1; j < 14; j++){
-        Card test = new Card(i, j);
-      }
+    Deck test = new Deck();
+    test.print();
+    test.shuffle();
+    System.out.println();
+    test.print();
+    test.shuffle();
+
+    System.out.println();
+    for(int i = 0; i < 200; i++){
+      System.out.println(test.drawCard().toString());
     }
   }
 
