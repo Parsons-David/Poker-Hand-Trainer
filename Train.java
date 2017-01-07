@@ -29,24 +29,40 @@ public class Train{
 
     System.out.println("Welcome to Poker Hand Training!");
     System.out.println("Type yes, when you are ready to begin?");
+
     while(ConsoleIO.readString().equalsIgnoreCase("yes")){
 
       Deck dealer = new Deck();
+      Card[] hold = new Card[2]; // Player Cards
+      Card[] community = new Card[5]; // Community dealt cards
       Card[] hand = new Card[7];
       ArrayList<Integer> values = new ArrayList<>();
-      // Card[] dealt = new Card[5];
+
+      // Deals cards to players
+      for(int i = 0; i < 2; i++){
+        hold[i] = dealer.drawCard();
+        trainer.panel.communityCardsIcons.get("lblHoldCard" + String.valueOf(i + 1)).setIcon(hold[i].getGraphic());
+      }
+
+      // Draws cards for community
+      for(int i = 0; i < 5; i++){
+        community[i] = dealer.drawCard();
+      }
 
       // Flop
 
-      for(int i = 0; i < 5; i ++){
-        hand[i] = dealer.drawCard();
+      for(int i = 0; i < 3; i++){
+        trainer.panel.communityCardsIcons.get("lblCommunityCard" + String.valueOf(i + 1)).setIcon(community[i].getGraphic());
+      }
+      for(int i = 3; i < 5; i++){
+        trainer.panel.communityCardsIcons.get("lblCommunityCard" + String.valueOf(i + 1)).setIcon(trainer.panel.backImage);
       }
 
-      String handStr = hand[0].toString() + " " + hand[1].toString();
-      String dealtStr = hand[2].toString() + " " + hand[3].toString() + " " + hand[4].toString();
+      String holdStr = hold[0].toString() + " " + hold[1].toString();
+      String communityStr = community[0].toString() + " " + community[1].toString() + " " + community[2].toString();
 
-      System.out.printf("Your hand:\t%s\n\n", handStr);
-      System.out.printf("\t\t%s\n\n", dealtStr);
+      System.out.printf("Your hand:\t%s\n\n", holdStr);
+      System.out.printf("\t\t%s\n\n", communityStr);
 
       System.out.println("Enter the values representing the hands that are no longer possible (enter '-1' when you are done):");
 
@@ -62,12 +78,14 @@ public class Train{
 
       // END FLOP
 
-      hand[5] = dealer.drawCard();
+      // Turn
 
-      dealtStr += " " + hand[5].toString();
+      trainer.panel.communityCardsIcons.get("lblCommunityCard4").setIcon(community[3].getGraphic());
 
-      System.out.printf("Your hand:\t%s\n\n", handStr);
-      System.out.printf("\t\t%s\n\n", dealtStr);
+      communityStr += " " + community[3].toString();
+
+      System.out.printf("Your hand:\t%s\n\n", holdStr);
+      System.out.printf("\t\t%s\n\n", communityStr);
 
       System.out.println("Enter the values representing the hands that are no longer possible (enter '-1' when you are done):");
 
@@ -81,14 +99,16 @@ public class Train{
         val = ConsoleIO.readInt();
       }
 
+      // END Turn
+
       // River
 
-      hand[6] = dealer.drawCard();
+      trainer.panel.communityCardsIcons.get("lblCommunityCard5").setIcon(community[4].getGraphic());
 
-      dealtStr += " " + hand[6].toString();
+      communityStr += " " + community[4].toString();
 
-      System.out.printf("Your hand:\t%s\n\n", handStr);
-      System.out.printf("\t\t%s\n\n", dealtStr);
+      System.out.printf("Your hand:\t%s\n\n", holdStr);
+      System.out.printf("\t\t%s\n\n", communityStr);
 
       System.out.println("Enter the values representing the hands that are no longer possible (enter '-1' when you are done):");
 

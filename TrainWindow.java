@@ -8,9 +8,9 @@ import java.awt.*;
 import java.nio.file.*;
 import java.io.*;
 
-public class TrainWindow extends JFrame {
+public class TrainWindow extends JFrame implements ActionListener {
 
-  private TrainPanel panel = new TrainPanel();
+  TrainPanel panel = new TrainPanel();
 
   public TrainWindow() {
 
@@ -20,27 +20,40 @@ public class TrainWindow extends JFrame {
     this.pack();
     this.setVisible(true);
     this.setResizable(false);
+
+    panel.btnState.addActionListener(this);
+  }
+
+  public void actionPerformed(ActionEvent e) {
+    System.out.println("Action Performed");
+    if(e.getSource().equals(panel.btnState)){
+      switch (panel.btnState.getText()){
+        case "Press to Start": panel.btnState.setText("Turn"); break;
+        case "Turn": panel.btnState.setText("River"); break;
+        case "River": panel.btnState.setText("Finish"); break;
+        case "Finish": panel.btnState.setText("Press to Start"); break;
+      }
+    }
   }
 
   // Panel Subclass
 
-  private class TrainPanel extends JPanel{
+  public class TrainPanel extends JPanel {
 
       // Stores all Components in a Hash Table
       HashMap<String, Object> panelComponents = new HashMap<String, Object>();
+      HashMap<String, JLabel> communityCardsIcons = new HashMap<String, JLabel>();
+      HashMap<String, JLabel> holdCardsIcons = new HashMap<String, JLabel>();
+      String mainDirectory = Paths.get("..").toAbsolutePath().toString().replace("\\","/");
+      JButton btnState;
+      ImageIcon backImage = new ImageIcon(mainDirectory + "/cards/b.gif");
 
       public TrainPanel() {
 
-        // BufferedImage image = ImageIO.read(new File("/cards/test.jpg"))
-
-        // String imagePath = "u.gif";
-        //
-        // Toolkit tk = Toolkit.getDefaultToolkit();
-        // File tf = new File(imagePath);
-        //
-        // ImageIcon t = new ImageIcon(this.getClass().getResource("../cards/test.jpg"));
-        //
-        // Image def = t.getImage();
+        btnState = new JButton("Press to Start");
+        add(btnState);
+        btnState.setBounds(344, 350, 173, 25);
+        btnState.setVisible(true);
 
         panelComponents.put("btnPlayerFH", new JButton ("Full House"));
         panelComponents.put("btnPlayerFK", new JButton ("Four of a Kind"));
@@ -54,12 +67,21 @@ public class TrainWindow extends JFrame {
         panelComponents.put("btnPlayerHC", new JButton ("High Card"));
         panelComponents.put("lblPlayerPH", new JLabel ("Your Possible Hands", SwingConstants.CENTER));
 
-        // JLabel lblCard1 = new JLabel(new ImageIcon(this.getClass().getResource("../cards/test.jpg")));
-        // System.out.println(def.getWidth(null) == -1);
-        // // lblCard1.setIcon(def);
-        // add(lblCard1);
-        // lblCard1.setBounds (100, 100, 150, 25);
-        // lblCard1.setVisible(true);
+        for(int i = 1; i < 6; i++){
+          JLabel tmpLabel = new JLabel (backImage);
+          communityCardsIcons.put("lblCommunityCard" + String.valueOf(i), tmpLabel);
+          add(tmpLabel);
+          tmpLabel.setBounds(180 + ((i - 1) * 100), 50, 100, 100);
+          tmpLabel.setVisible(true);
+        }
+
+        for(int i = 1; i < 3; i++){
+          JLabel tmpLabel = new JLabel (backImage);
+          communityCardsIcons.put("lblHoldCard" + String.valueOf(i), tmpLabel);
+          add(tmpLabel);
+          tmpLabel.setBounds(330 + ((i - 1) * 100), 220, 100, 100);
+          tmpLabel.setVisible(true);
+        }
 
         //adjust size and set layout
         setPreferredSize (new Dimension (722, 412));

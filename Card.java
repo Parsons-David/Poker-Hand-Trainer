@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.nio.file.*;
 import java.io.*;
+import javax.swing.*;
 
 public class Card {
 
@@ -12,9 +13,10 @@ public class Card {
   // each card has a suit, face, and a graphic
   private int suit; // Suit {0 : spades, 1 : hearts, 2 : clubs, 3 : diamonds}
   private int face; // Face {1 : ace, 2-10 : 2-10, 11 : jack, 12 : queen, 13 : king}
-  private Image graphic;
+  private ImageIcon graphic;
   private boolean faceUp = true;
 
+  String mainDirectory = Paths.get("..").toAbsolutePath().toString().replace("\\","/");
 
   // Creates new card
   public Card(int newSuit, int newFace){
@@ -22,7 +24,7 @@ public class Card {
     this.face = newFace;
 
     // All card graphics are stored in the cards folder
-    String imagePath = "cards/";
+    String imagePath = mainDirectory + "/cards/";
 
     // Values 2-10 are represented by their integer value. Values
     imagePath += (this.face < 11 && this.face > 1 ? Integer.toString(newFace) : specialFaces[(newFace - 1) % 9]);
@@ -34,13 +36,13 @@ public class Card {
     imagePath += ".gif";
 
     // Toolkit tk = Toolkit.getDefaultToolkit();
-    // File tf = new File(imagePath);
+    File tf = new File(imagePath);
     //
     // // assures that the given graphic exists
-    // this.graphic = (tf.exists() ? tk.getImage(imagePath) : null);
-    //
+    this.graphic = (tf.exists() ? (new ImageIcon(imagePath)) : null);
+
     // System.out.print(imagePath + " -> ");
-    //
+
     // if(this.graphic == null){
     //   System.out.println(Integer.toString(newFace) + Integer.toString(newFace) + ".gif Not Found");
     // } else {
@@ -59,7 +61,7 @@ public class Card {
   }
 
   //
-  public Image getGraphic() {
+  public ImageIcon getGraphic() {
       return this.graphic;
   }
 
