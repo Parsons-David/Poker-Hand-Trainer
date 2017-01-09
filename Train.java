@@ -1,186 +1,68 @@
 import java.util.ArrayList;
+import java.awt.event.*;
+import javax.swing.*;
+import java.util.Iterator;
+import java.util.HashMap;
 
-public class Train{
+public class Train implements ActionListener{
 
-  public static void main(String[] args) {
+  private TrainPanel components;
 
-    // Window Testing
+  Deck dealer = new Deck();
+  Card[] hold = new Card[2]; // Player Cards
+  Card[] community = new Card[5]; // Community dealt cards
+  ArrayList<Integer> values = new ArrayList<>();
 
-    TrainWindow trainer = new TrainWindow();
+  public Train(TrainPanel panel){
+    this.components = panel;
+    assignListeners();
+  }
 
-    // END Window Testing
+  private void assignListeners(){
 
+    Iterator it;
 
-    // Deck Testing
-
-    // Deck test = new Deck();
-    // test.print();
-    // test.shuffle();
-    // System.out.println();
-    // test.print();
-    // test.shuffle();
+    // State Button
+    this.components.btnState.addActionListener(this);
+    // 
+    // System.out.println(this.components.communityComponents);
     //
-    // System.out.println();
-    // for(int i = 0; i < 200; i++){
-    //   System.out.println(test.drawCard().toString());
-    // }
-
-    // END Deck Testing
-
-    System.out.println("Welcome to Poker Hand Training!");
-    System.out.println("Type yes, when you are ready to begin?");
-
-    Deck dealer = new Deck();
-    Card[] hold = new Card[2]; // Player Cards
-    Card[] community = new Card[5]; // Community dealt cards
-    ArrayList<Integer> values = new ArrayList<>();
-
-    while(ConsoleIO.readString().equalsIgnoreCase("yes")){
-
-      // Deals cards to players
-      for(int i = 0; i < 2; i++){
-        hold[i] = dealer.drawCard();
-        trainer.panel.communityCardsIcons.get("lblHoldCard" + String.valueOf(i + 1)).setIcon(hold[i].getGraphic());
-      }
-
-      // Draws cards for community
-      for(int i = 0; i < 5; i++){
-        community[i] = dealer.drawCard();
-      }
-
-      // Flop
-
-      for(int i = 0; i < 3; i++){
-        trainer.panel.communityCardsIcons.get("lblCommunityCard" + String.valueOf(i + 1)).setIcon(community[i].getGraphic());
-      }
-      for(int i = 3; i < 5; i++){
-        trainer.panel.communityCardsIcons.get("lblCommunityCard" + String.valueOf(i + 1)).setIcon(trainer.panel.backImage);
-      }
-
-      String holdStr = hold[0].toString() + " " + hold[1].toString();
-      String communityStr = community[0].toString() + " " + community[1].toString() + " " + community[2].toString();
-
-      System.out.printf("Your hand:\t%s\n\n", holdStr);
-      System.out.printf("\t\t%s\n\n", communityStr);
-
-      System.out.println("Enter the values representing the hands that are no longer possible (enter '-1' when you are done):");
-
-      int val = ConsoleIO.readInt();
-
-      while(val != -1){
-        if(val > 0 && val < 11){
-          values.add(val);
-        }
-        System.out.print("Enter another value or '-1': ");
-        val = ConsoleIO.readInt();
-      }
-
-      // END FLOP
-
-      // Turn
-
-      trainer.panel.communityCardsIcons.get("lblCommunityCard4").setIcon(community[3].getGraphic());
-
-      communityStr += " " + community[3].toString();
-
-      System.out.printf("Your hand:\t%s\n\n", holdStr);
-      System.out.printf("\t\t%s\n\n", communityStr);
-
-      System.out.println("Enter the values representing the hands that are no longer possible (enter '-1' when you are done):");
-
-      val = ConsoleIO.readInt();
-
-      while(val != -1){
-        if(val > 0 && val < 11){
-          values.add(val);
-        }
-        System.out.print("Enter another value or '-1': ");
-        val = ConsoleIO.readInt();
-      }
-
-      // END Turn
-
-      // River
-
-      trainer.panel.communityCardsIcons.get("lblCommunityCard5").setIcon(community[4].getGraphic());
-
-      communityStr += " " + community[4].toString();
-
-      System.out.printf("Your hand:\t%s\n\n", holdStr);
-      System.out.printf("\t\t%s\n\n", communityStr);
-
-      System.out.println("Enter the values representing the hands that are no longer possible (enter '-1' when you are done):");
-
-      val = ConsoleIO.readInt();
-
-      while(val != -1){
-        if(val > 0 && val < 11){
-          values.add(val);
-        }
-        System.out.print("Enter another value or '-1': ");
-        val = ConsoleIO.readInt();
-      }
-
-      System.out.println("Would you like complete another round? - Type 'yes' if you are.");
-
-    }
-
-
-    // Equality and Contains Test
-
-    // ArrayList<Card> test = new ArrayList<>();
-    // for(int i = 1; i < 8; i++){
-    //   Card hold = new Card(0, i);
-    //   test.add(hold);
-    //   System.out.println(test.get(i - 1).toString());
+    // // Player Buttons
+    // it = this.components.playerComponents.entrySet().iterator();
+    // while(it.hasNext()){
+    //
+    //   HashMap.Entry pair = (HashMap.Entry) it.next();
+    //   Object comp = pair.getValue();
+    //   System.out.println(pair.getKey());
+    //
+    //   if(comp instanceof JButton){
+    //     JButton btn = (JButton) comp;
+    //     btn.addActionListener(this);
+    //   }
+    //
+    //   it.remove(); // avoids a ConcurrentModificationException
     // }
     //
-    // for(int i = 5; i < 10; i++){
-    //   System.out.println(test.contains(new Card(0, i)));
+    // // Community Buttons
+    // it = components.communityComponents.entrySet().iterator();
+    // while(it.hasNext()){
+    //
+    //
     // }
-
-    // END Equality and Contains Test
 
   }
 
-  public boolean royalFlush(){
-    for(int i = 0; i < 5; i++){
-
+  public void actionPerformed(ActionEvent e) {
+    System.out.println("Action Performed - Updated");
+    if(e.getSource().equals(components.btnState)){
+      JButton state = components.btnState;
+      switch (state.getText()){
+        case "Press to Start": state.setText("Turn"); break;
+        case "Turn": state.setText("River"); break;
+        case "River": state.setText("Finish"); break;
+        case "Finish": state.setText("Press to Start"); break;
+      }
     }
-    return false;
   }
-
-  // public boolean straightFlush(){
-  //
-  // }
-  //
-  // public boolean fourKind(){
-  //
-  // }
-  //
-  // public boolean fullHouse(){
-  //
-  // }
-  //
-  // public boolean flush(){
-  //
-  // }
-  //
-  // public boolean straight(){
-  //
-  // }
-  //
-  // public boolean threeKind(){
-  //
-  // }
-  //
-  // public boolean twoPair(){
-  //
-  // }
-  //
-  // public boolean pair(){
-  //
-  // }
-  //
 
 }

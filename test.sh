@@ -5,4 +5,4 @@ javac -d build *.java
 cd build
 
 # Run Train, which contains the main method for the project.
-java Train
+java Launcher
