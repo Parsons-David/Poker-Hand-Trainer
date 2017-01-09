@@ -16,7 +16,7 @@ public class TrainWindow extends JFrame implements ActionListener {
 
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.getContentPane().add(panel);
-    this.setTitle("Matrix Calculator");
+    this.setTitle("Poker Hand Trainer");
     this.pack();
     this.setVisible(true);
     this.setResizable(false);
@@ -27,11 +27,12 @@ public class TrainWindow extends JFrame implements ActionListener {
   public void actionPerformed(ActionEvent e) {
     System.out.println("Action Performed");
     if(e.getSource().equals(panel.btnState)){
-      switch (panel.btnState.getText()){
-        case "Press to Start": panel.btnState.setText("Turn"); break;
-        case "Turn": panel.btnState.setText("River"); break;
-        case "River": panel.btnState.setText("Finish"); break;
-        case "Finish": panel.btnState.setText("Press to Start"); break;
+      JButton state = panel.btnState;
+      switch (state.getText()){
+        case "Press to Start": state.setText("Turn"); break;
+        case "Turn": state.setText("River"); break;
+        case "River": state.setText("Finish"); break;
+        case "Finish": state.setText("Press to Start"); break;
       }
     }
   }
@@ -41,7 +42,8 @@ public class TrainWindow extends JFrame implements ActionListener {
   public class TrainPanel extends JPanel {
 
       // Stores all Components in a Hash Table
-      HashMap<String, Object> panelComponents = new HashMap<String, Object>();
+      HashMap<String, Object> playerComponents = new HashMap<String, Object>();
+      HashMap<String, Object> communityComponents = new HashMap<String, Object>();
       HashMap<String, JLabel> communityCardsIcons = new HashMap<String, JLabel>();
       HashMap<String, JLabel> holdCardsIcons = new HashMap<String, JLabel>();
       String mainDirectory = Paths.get("..").toAbsolutePath().toString().replace("\\","/");
@@ -50,22 +52,14 @@ public class TrainWindow extends JFrame implements ActionListener {
 
       public TrainPanel() {
 
+        //adjust size and set layout
+        setPreferredSize (new Dimension (854, 412));
+        setLayout (null);
+
         btnState = new JButton("Press to Start");
         add(btnState);
         btnState.setBounds(344, 350, 173, 25);
         btnState.setVisible(true);
-
-        panelComponents.put("btnPlayerFH", new JButton ("Full House"));
-        panelComponents.put("btnPlayerFK", new JButton ("Four of a Kind"));
-        panelComponents.put("btnPlayerSF", new JButton ("Straight Flush"));
-        panelComponents.put("btnPlayerRF", new JButton ("Royal Flush"));
-        panelComponents.put("btnPlayerF", new JButton ("Flush"));
-        panelComponents.put("btnPlayerStraight", new JButton ("Straight"));
-        panelComponents.put("btnPlayerTK", new JButton ("Three of a Kind"));
-        panelComponents.put("btnPlayerTP", new JButton ("Two Pair"));
-        panelComponents.put("btnPlayerP", new JButton ("Pair"));
-        panelComponents.put("btnPlayerHC", new JButton ("High Card"));
-        panelComponents.put("lblPlayerPH", new JLabel ("Your Possible Hands", SwingConstants.CENTER));
 
         for(int i = 1; i < 6; i++){
           JLabel tmpLabel = new JLabel (backImage);
@@ -83,9 +77,18 @@ public class TrainWindow extends JFrame implements ActionListener {
           tmpLabel.setVisible(true);
         }
 
-        //adjust size and set layout
-        setPreferredSize (new Dimension (722, 412));
-        setLayout (null);
+        playerComponents.put("btnPlayerFH", new JButton ("Full House"));
+        playerComponents.put("btnPlayerFK", new JButton ("Four of a Kind"));
+        playerComponents.put("btnPlayerSF", new JButton ("Straight Flush"));
+        playerComponents.put("btnPlayerRF", new JButton ("Royal Flush"));
+        playerComponents.put("btnPlayerF", new JButton ("Flush"));
+        playerComponents.put("btnPlayerStraight", new JButton ("Straight"));
+        playerComponents.put("btnPlayerTK", new JButton ("Three of a Kind"));
+        playerComponents.put("btnPlayerTP", new JButton ("Two Pair"));
+        playerComponents.put("btnPlayerP", new JButton ("Pair"));
+        playerComponents.put("btnPlayerHC", new JButton ("High Card"));
+        playerComponents.put("lblPlayerPH", new JLabel ("Your Possible Hands", SwingConstants.CENTER));
+
 
         //base Dimensions for buttons on the left
         int btnX = 20;
@@ -93,7 +96,56 @@ public class TrainWindow extends JFrame implements ActionListener {
         int lblX = 20;
         int lblY = 20;
 
-        Iterator it = panelComponents.entrySet().iterator();
+        Iterator it = playerComponents.entrySet().iterator();
+        while(it.hasNext()){ // Iterates over every component of the panel hash table
+
+          HashMap.Entry pair = (HashMap.Entry) it.next();
+          Object comp = pair.getValue();
+
+          if(comp instanceof JButton){
+            JButton btn = (JButton) comp;
+
+            add(btn);
+            // System.out.println(btn.getText() + " added.");
+
+            btn.setBounds (btnX, btnY, 150, 25);
+            btn.setVisible(true);
+
+            btnY += 30;
+          } else if(comp instanceof JLabel){
+            JLabel lbl = (JLabel) comp;
+
+            add(lbl);
+
+            // System.out.println(lbl.getText() + " added.");
+
+            lbl.setBounds (lblX, lblY, 150, 25);
+            lbl.setVisible(true);
+          }
+
+          it.remove(); // avoids a ConcurrentModificationException
+        }
+
+        communityComponents.put("btnCommunityFH", new JButton ("Full House"));
+        communityComponents.put("btnCommunityFK", new JButton ("Four of a Kind"));
+        communityComponents.put("btnCommunitySF", new JButton ("Straight Flush"));
+        communityComponents.put("btnCommunityRF", new JButton ("Royal Flush"));
+        communityComponents.put("btnCommunityF", new JButton ("Flush"));
+        communityComponents.put("btnCommunityStraight", new JButton ("Straight"));
+        communityComponents.put("btnCommunityTK", new JButton ("Three of a Kind"));
+        communityComponents.put("btnCommunityTP", new JButton ("Two Pair"));
+        communityComponents.put("btnCommunityP", new JButton ("Pair"));
+        communityComponents.put("btnCommunityHC", new JButton ("High Card"));
+        communityComponents.put("lblCommunityPH", new JLabel ("All Possible Hands", SwingConstants.CENTER));
+
+
+        // base Dimensions for buttons on the right
+        btnX = 693;
+        btnY = 50;
+        lblX = 700;
+        lblY = 20;
+
+        it = communityComponents.entrySet().iterator();
         while(it.hasNext()){ // Iterates over every component of the panel hash table
 
           HashMap.Entry pair = (HashMap.Entry) it.next();

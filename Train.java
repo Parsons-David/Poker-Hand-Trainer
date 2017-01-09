@@ -30,13 +30,12 @@ public class Train{
     System.out.println("Welcome to Poker Hand Training!");
     System.out.println("Type yes, when you are ready to begin?");
 
-    while(ConsoleIO.readString().equalsIgnoreCase("yes")){
+    Deck dealer = new Deck();
+    Card[] hold = new Card[2]; // Player Cards
+    Card[] community = new Card[5]; // Community dealt cards
+    ArrayList<Integer> values = new ArrayList<>();
 
-      Deck dealer = new Deck();
-      Card[] hold = new Card[2]; // Player Cards
-      Card[] community = new Card[5]; // Community dealt cards
-      Card[] hand = new Card[7];
-      ArrayList<Integer> values = new ArrayList<>();
+    while(ConsoleIO.readString().equalsIgnoreCase("yes")){
 
       // Deals cards to players
       for(int i = 0; i < 2; i++){
