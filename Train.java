@@ -16,6 +16,7 @@ public class Train implements ActionListener{
   public Train(TrainPanel panel){
     this.components = panel;
     assignListeners();
+    setUp();
   }
 
   private void assignListeners(){
@@ -24,45 +25,105 @@ public class Train implements ActionListener{
 
     // State Button
     this.components.btnState.addActionListener(this);
-    // 
-    // System.out.println(this.components.communityComponents);
-    //
-    // // Player Buttons
-    // it = this.components.playerComponents.entrySet().iterator();
-    // while(it.hasNext()){
-    //
-    //   HashMap.Entry pair = (HashMap.Entry) it.next();
-    //   Object comp = pair.getValue();
-    //   System.out.println(pair.getKey());
-    //
-    //   if(comp instanceof JButton){
-    //     JButton btn = (JButton) comp;
-    //     btn.addActionListener(this);
-    //   }
-    //
-    //   it.remove(); // avoids a ConcurrentModificationException
-    // }
-    //
-    // // Community Buttons
-    // it = components.communityComponents.entrySet().iterator();
-    // while(it.hasNext()){
-    //
-    //
-    // }
+
+    for(JButton btn : this.components.playerButtons){
+      btn.addActionListener(this);
+    }
+
+    for(JButton btn : this.components.communityButtons){
+      btn.addActionListener(this);
+    }
 
   }
 
   public void actionPerformed(ActionEvent e) {
-    System.out.println("Action Performed - Updated");
-    if(e.getSource().equals(components.btnState)){
-      JButton state = components.btnState;
-      switch (state.getText()){
-        case "Press to Start": state.setText("Turn"); break;
-        case "Turn": state.setText("River"); break;
-        case "River": state.setText("Finish"); break;
-        case "Finish": state.setText("Press to Start"); break;
+
+    if(e.getSource() instanceof JButton){
+      JButton btn = (JButton) e.getSource();
+      if(this.components.playerButtons.contains(btn)){
+        btn.setEnabled(false);
+      } else if(this.components.communityButtons.contains(btn)){
+        btn.setEnabled(false);
+      } else {
+        switch (btn.getText()){
+          case "Press to Start": beginRound(); break;
+          case "Turn": flopCheck(); break;
+          case "River": turnCheck(); break;
+          case "Finish": riverCheck(); break;
+        }
       }
+
     }
+
+    // System.out.println("Action Performed - Updated");
+  }
+
+  public void setUp(){
+
+    // Disable Possible Hand Buttons
+    for(JButton btn : this.components.playerButtons){
+      btn.setEnabled(false);
+    }
+    for(JButton btn : this.components.communityButtons){
+      btn.setEnabled(false);
+    }
+
+    // Displays Back Images for start.
+    for(int i = 0; i < 5; i++){
+      components.communityCardIcons.get(i).setIcon(components.backImage);
+    }
+    for(int i = 0; i < 2; i++){
+      components.playerCardIcons.get(i).setIcon(components.backImage);
+    }
+  }
+
+  public void beginRound(){
+
+    // Enable Possible Hand Buttons
+    for(JButton btn : this.components.playerButtons){
+      btn.setEnabled(true);
+    }
+    for(JButton btn : this.components.communityButtons){
+      btn.setEnabled(true);
+    }
+
+    // Deals cards to players
+    for(int i = 0; i < 2; i++){
+      hold[i] = dealer.drawCard();
+      components.playerCardIcons.get(i).setIcon(hold[i].getGraphic());
+    }
+
+    // Draws cards for community
+    for(int i = 0; i < 5; i++){
+      community[i] = dealer.drawCard();
+    }
+
+    // Show Flop
+    for(int i = 0; i < 3; i++){
+      components.communityCardIcons.get(i).setIcon(community[i].getGraphic());
+    }
+
+    components.btnState.setText("Turn");
+  }
+
+  public void flopCheck(){
+
+    components.communityCardIcons.get(3).setIcon(community[3].getGraphic());
+
+    components.btnState.setText("River");
+  }
+
+  public void turnCheck(){
+
+    components.communityCardIcons.get(4).setIcon(community[4].getGraphic());
+
+    components.btnState.setText("Finish");
+  }
+
+  public void riverCheck(){
+
+    setUp();
+    components.btnState.setText("Press to Start");
   }
 
 }

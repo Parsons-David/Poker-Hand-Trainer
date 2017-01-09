@@ -14,8 +14,18 @@ public class TrainPanel extends JPanel {
     String mainDirectory = Paths.get("..").toAbsolutePath().toString().replace("\\","/");
 
     // Stores all Components in a Hash Table
-    HashMap<String, Object> playerComponents = new HashMap<String, Object>();
-    HashMap<String, Object> communityComponents = new HashMap<String, Object>();
+
+    ArrayList<JButton> playerButtons = new ArrayList<>();
+    JLabel lblPlayerPH;
+
+    ArrayList<JButton> communityButtons = new ArrayList<>();
+    JLabel lblCommunityPH;
+
+    ArrayList<JLabel> communityCardIcons = new ArrayList<>();
+
+    ArrayList<JLabel> playerCardIcons = new ArrayList<>();
+
+
     HashMap<String, JLabel> communityCardsIcons = new HashMap<String, JLabel>();
     HashMap<String, JLabel> holdCardsIcons = new HashMap<String, JLabel>();
     JButton btnState;
@@ -33,33 +43,33 @@ public class TrainPanel extends JPanel {
       btnState.setBounds(344, 350, 173, 25);
       btnState.setVisible(true);
 
-      for(int i = 1; i < 6; i++){
+      for(int i = 0; i < 5; i++){
         JLabel tmpLabel = new JLabel (backImage);
-        communityCardsIcons.put("lblCommunityCard" + String.valueOf(i), tmpLabel);
+        communityCardIcons.add(tmpLabel);
         add(tmpLabel);
-        tmpLabel.setBounds(180 + ((i - 1) * 100), 50, 100, 100);
+        tmpLabel.setBounds(180 + ((i) * 100), 50, 100, 100);
         tmpLabel.setVisible(true);
       }
 
-      for(int i = 1; i < 3; i++){
+      for(int i = 0; i < 2; i++){
         JLabel tmpLabel = new JLabel (backImage);
-        communityCardsIcons.put("lblHoldCard" + String.valueOf(i), tmpLabel);
+        playerCardIcons.add(tmpLabel);
         add(tmpLabel);
-        tmpLabel.setBounds(330 + ((i - 1) * 100), 220, 100, 100);
+        tmpLabel.setBounds(330 + ((i) * 100), 220, 100, 100);
         tmpLabel.setVisible(true);
       }
 
-      playerComponents.put("btnPlayerFH", new JButton ("Full House"));
-      playerComponents.put("btnPlayerFK", new JButton ("Four of a Kind"));
-      playerComponents.put("btnPlayerSF", new JButton ("Straight Flush"));
-      playerComponents.put("btnPlayerRF", new JButton ("Royal Flush"));
-      playerComponents.put("btnPlayerF", new JButton ("Flush"));
-      playerComponents.put("btnPlayerStraight", new JButton ("Straight"));
-      playerComponents.put("btnPlayerTK", new JButton ("Three of a Kind"));
-      playerComponents.put("btnPlayerTP", new JButton ("Two Pair"));
-      playerComponents.put("btnPlayerP", new JButton ("Pair"));
-      playerComponents.put("btnPlayerHC", new JButton ("High Card"));
-      playerComponents.put("lblPlayerPH", new JLabel ("Your Possible Hands", SwingConstants.CENTER));
+      playerButtons.add(new JButton ("Full House"));
+      playerButtons.add(new JButton ("Four of a Kind"));
+      playerButtons.add(new JButton ("Straight Flush"));
+      playerButtons.add(new JButton ("Royal Flush"));
+      playerButtons.add(new JButton ("Flush"));
+      playerButtons.add(new JButton ("Straight"));
+      playerButtons.add(new JButton ("Three of a Kind"));
+      playerButtons.add(new JButton ("Two Pair"));
+      playerButtons.add(new JButton ("Pair"));
+      playerButtons.add(new JButton ("High Card"));
+      lblPlayerPH = new JLabel ("Your Possible Hands", SwingConstants.CENTER);
 
       //base Dimensions for buttons on the left
       int btnX = 20;
@@ -67,46 +77,30 @@ public class TrainPanel extends JPanel {
       int lblX = 20;
       int lblY = 20;
 
-      Iterator it = playerComponents.entrySet().iterator();
-      while(it.hasNext()){ // Iterates over every component of the panel hash table
-
-        HashMap.Entry pair = (HashMap.Entry) it.next();
-        Object comp = pair.getValue();
-
-        if(comp instanceof JButton){
-          JButton btn = (JButton) comp;
-
-          add(btn);
-          // System.out.println(btn.getText() + " added.");
-
-          btn.setBounds (btnX, btnY, 150, 25);
-          btn.setVisible(true);
-
-          btnY += 30;
-        } else if(comp instanceof JLabel){
-          JLabel lbl = (JLabel) comp;
-
-          add(lbl);
-
-          // System.out.println(lbl.getText() + " added.");
-
-          lbl.setBounds (lblX, lblY, 150, 25);
-          lbl.setVisible(true);
-        }
+      for(JButton btn : playerButtons){
+        add(btn);
+        // System.out.println(btn.getText() + " added.");
+        btn.setBounds (btnX, btnY, 150, 25);
+        btn.setVisible(true);
+        btnY += 30;
       }
 
-      communityComponents.put("btnCommunityFH", new JButton ("Full House"));
-      communityComponents.put("btnCommunityFK", new JButton ("Four of a Kind"));
-      communityComponents.put("btnCommunitySF", new JButton ("Straight Flush"));
-      communityComponents.put("btnCommunityRF", new JButton ("Royal Flush"));
-      communityComponents.put("btnCommunityF", new JButton ("Flush"));
-      communityComponents.put("btnCommunityStraight", new JButton ("Straight"));
-      communityComponents.put("btnCommunityTK", new JButton ("Three of a Kind"));
-      communityComponents.put("btnCommunityTP", new JButton ("Two Pair"));
-      communityComponents.put("btnCommunityP", new JButton ("Pair"));
-      communityComponents.put("btnCommunityHC", new JButton ("High Card"));
-      communityComponents.put("lblCommunityPH", new JLabel ("All Possible Hands", SwingConstants.CENTER));
+      add(lblPlayerPH);
+      // System.out.println(lbl.getText() + " added.");
+      lblPlayerPH.setBounds (lblX, lblY, 150, 25);
+      lblPlayerPH.setVisible(true);
 
+      communityButtons.add(new JButton ("Full House"));
+      communityButtons.add(new JButton ("Four of a Kind"));
+      communityButtons.add(new JButton ("Straight Flush"));
+      communityButtons.add(new JButton ("Royal Flush"));
+      communityButtons.add(new JButton ("Flush"));
+      communityButtons.add(new JButton ("Straight"));
+      communityButtons.add(new JButton ("Three of a Kind"));
+      communityButtons.add(new JButton ("Two Pair"));
+      communityButtons.add(new JButton ("Pair"));
+      communityButtons.add(new JButton ("High Card"));
+      lblCommunityPH = new JLabel ("All Possible Hands", SwingConstants.CENTER);
 
       // base Dimensions for buttons on the right
       btnX = 693;
@@ -114,33 +108,18 @@ public class TrainPanel extends JPanel {
       lblX = 700;
       lblY = 20;
 
-      it = communityComponents.entrySet().iterator();
-      while(it.hasNext()){ // Iterates over every component of the panel hash table
-
-        HashMap.Entry pair = (HashMap.Entry) it.next();
-        Object comp = pair.getValue();
-
-        if(comp instanceof JButton){
-          JButton btn = (JButton) comp;
-
-          add(btn);
-          // System.out.println(btn.getText() + " added.");
-
-          btn.setBounds (btnX, btnY, 150, 25);
-          btn.setVisible(true);
-
-          btnY += 30;
-        } else if(comp instanceof JLabel){
-          JLabel lbl = (JLabel) comp;
-
-          add(lbl);
-
-          // System.out.println(lbl.getText() + " added.");
-
-          lbl.setBounds (lblX, lblY, 150, 25);
-          lbl.setVisible(true);
-        }
+      for(JButton btn : communityButtons){
+        add(btn);
+        // System.out.println(btn.getText() + " added.");
+        btn.setBounds (btnX, btnY, 150, 25);
+        btn.setVisible(true);
+        btnY += 30;
       }
+
+      add(lblCommunityPH);
+      // System.out.println(lbl.getText() + " added.");
+      lblCommunityPH.setBounds (lblX - 5, lblY, 150, 25);
+      lblCommunityPH.setVisible(true);
 
     }
 }
