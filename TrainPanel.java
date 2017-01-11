@@ -59,10 +59,10 @@ public class TrainPanel extends JPanel {
         tmpLabel.setVisible(true);
       }
 
-      playerButtons.add(new JButton ("Full House"));
-      playerButtons.add(new JButton ("Four of a Kind"));
-      playerButtons.add(new JButton ("Straight Flush"));
       playerButtons.add(new JButton ("Royal Flush"));
+      playerButtons.add(new JButton ("Straight Flush"));
+      playerButtons.add(new JButton ("Four of a Kind"));
+      playerButtons.add(new JButton ("Full House"));
       playerButtons.add(new JButton ("Flush"));
       playerButtons.add(new JButton ("Straight"));
       playerButtons.add(new JButton ("Three of a Kind"));
@@ -90,10 +90,10 @@ public class TrainPanel extends JPanel {
       lblPlayerPH.setBounds (lblX, lblY, 150, 25);
       lblPlayerPH.setVisible(true);
 
-      communityButtons.add(new JButton ("Full House"));
-      communityButtons.add(new JButton ("Four of a Kind"));
-      communityButtons.add(new JButton ("Straight Flush"));
       communityButtons.add(new JButton ("Royal Flush"));
+      communityButtons.add(new JButton ("Straight Flush"));
+      communityButtons.add(new JButton ("Four of a Kind"));
+      communityButtons.add(new JButton ("Full House"));
       communityButtons.add(new JButton ("Flush"));
       communityButtons.add(new JButton ("Straight"));
       communityButtons.add(new JButton ("Three of a Kind"));

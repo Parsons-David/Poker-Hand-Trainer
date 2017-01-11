@@ -28,13 +28,6 @@ public class Launcher {
 
     // END Deck Testing
 
-    Deck dealer = new Deck();
-    Card[] hold = new Card[2]; // Player Cards
-    Card[] community = new Card[5]; // Community dealt cards
-    ArrayList<Integer> values = new ArrayList<>();
-
-    System.out.println("Welcome to Poker Hand Training!");
-    System.out.println("Type yes, when you are ready to begin?");
     // Equality and Contains Test
 
     // ArrayList<Card> test = new ArrayList<>();
@@ -51,45 +44,5 @@ public class Launcher {
     // END Equality and Contains Test
 
   }
-
-  public boolean royalFlush(){
-    for(int i = 0; i < 5; i++){
-
-    }
-    return false;
-  }
-
-  // public boolean straightFlush(){
-  //
-  // }
-  //
-  // public boolean fourKind(){
-  //
-  // }
-  //
-  // public boolean fullHouse(){
-  //
-  // }
-  //
-  // public boolean flush(){
-  //
-  // }
-  //
-  // public boolean straight(){
-  //
-  // }
-  //
-  // public boolean threeKind(){
-  //
-  // }
-  //
-  // public boolean twoPair(){
-  //
-  // }
-  //
-  // public boolean pair(){
-  //
-  // }
-  //
 
 }
