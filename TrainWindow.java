@@ -130,7 +130,7 @@ public class TrainWindow extends JFrame {
       this.pack();
       this.setVisible(true);
       this.setResizable(true);
-      this.getContentPane().setBackground(Color.lightGray);
+      this.getContentPane().setBackground(new Color(76, 153, 0));
     }
 }
 
