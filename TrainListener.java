@@ -112,6 +112,8 @@ public class TrainListener implements ActionListener{
     }
 
     components.btnState.setText("Turn");
+
+    System.out.println("FLOP:");
   }
 
   public void flopCheck(){
@@ -122,6 +124,8 @@ public class TrainListener implements ActionListener{
     components.communityCardIcons.get(3).setIcon(community.get(3).getGraphic());
 
     components.btnState.setText("River");
+
+    System.out.println("TURN:");
   }
 
   public void turnCheck(){
@@ -132,6 +136,8 @@ public class TrainListener implements ActionListener{
     components.communityCardIcons.get(4).setIcon(community.get(4).getGraphic());
 
     components.btnState.setText("Finish");
+
+    System.out.println("RIVER:");
   }
 
   public void riverCheck(){
@@ -144,156 +150,203 @@ public class TrainListener implements ActionListener{
   }
 
   public void checkHands(int freeCards){
-    hands[4] = flush(freeCards);
+    boolean cards[][] = new boolean[4][15];
 
-    int faces[] = new int[14];
     for(Card i : hold){
-      faces[i.getFace() - 1]++;
+      cards[i.getSuit()][i.getFace() - 1] = true;
     }
     for(int i = 0; i < 5 - freeCards; i++){
-      faces[community.get(i).getFace() - 1]++;
+      cards[community.get(i).getSuit()][community.get(i).getFace() - 1] = true;
     }
-    faces[13] = faces[0];
-
-    for(int i = 0; i < 14; i++){
-      System.out.println("\t" + faces[i] + " " + i);
-    }
-
-    // Holder array for storing if
-    boolean straightFaces[] = new boolean[14];
-    for(int i = 0; i < 14; i++){
-      if(faces[i] > 0){
-        straightFaces[i] = true;
-        switch (faces[i]){
-          case 2 :
-            // 3 -> Full House : If three of a kind exist, now a pair exists, therefore full house exists.
-            hands[3] = hands[6];
-            // 7 -> Two Pair : If a pair already exits, this is the second pair.
-            hands[7] = hands[8];
-            // 8 -> Pair : In this case a pair exists.
-            hands[8] = true;
-            break;
-          case 3 :
-            // 3 -> Full House : If a pair exists, now three of a kind exists, therefore full house exists.
-            hands[3] = hands[8];
-            // 7 -> Two Pair : If a pair already exits, this is the second pair.
-            hands[7] = hands[8];
-            // 6 -> Three of a kind : In this case three of a kind exists.
-            hands[6] = true;
-            // 8 -> Pair : In this case a pair exists.
-            hands[8] = true;
-            break;
-          case 4 :
-            // 2 -> Four of a kind : In this case four of a kind exists.
-            hands[2] = true;
-            // 3 -> Full House : If a pair exists, now three of a kind exists, therefore full house exists.
-            hands[3] = hands[8];
-            // 7 -> Two Pair : If a pair already exits, this is the second pair.
-            hands[7] = hands[8];
-            // 6 -> Three of a kind : In this case three of a kind exists.
-            hands[6] = true;
-            // 8 -> Pair : In this case a pair exists.
-            hands[8] = true;
-            break;
-        }
-      } else {
-        straightFaces[i] = false;
-      }
+    // Sets low and high ace
+    for(boolean suit[] : cards){
+      suit[0] = suit[0] || suit[14];
+      suit[14] = suit[0] || suit[14];
     }
 
-    // hands[5] = isStraight(freeCards, straightFaces);
+    hands[0] = royalFlush(cards, freeCards);
+    hands[1] = straightFlush(cards, freeCards);
+    hands[4] = flush(cards, freeCards);
+    hands[5] = straight(cards, freeCards);
 
-    // 2 -> Straight Flush: If a straight and a flush exists, then a straight flush exists
-    // hands[1] = hands[5] && hands[4];
+    pairAndKinds(cards, freeCards);
+
   }
 
-  public boolean flush(int freeCards){
-    String strs[] = {"♠","♥","♣","♦"};
-    int suits[] = new int[4];
-    for(Card i : hold){
-      suits[i.getSuit()]++;
-    }
-    for(int i = 0; i < 5 - freeCards; i++){
-      suits[community.get(i).getSuit()]++;
-    }
-    for(int i = 0; i < 4; i++){
-      System.out.println("\t" + suits[i] + " " + strs[i]);
-    }
-    for(int i : suits){
-      if(i + freeCards > 4){
-        System.out.println("Flush Possible");
+  // Checks if a royal Straight is possible
+  public boolean royalFlush(boolean cards[][], int buffer){
+    // Checks every suit in the deck
+    for(boolean suit[] : cards){
+      // Temporary buffer, Buffer meaning cards that haven't been flipped
+      int tmpBuffer = buffer;
+      // Iterates over 10 - Ace.
+      for(int i = 10; i < 15; i++){
+        // If card has been dealt add one to temp buffer
+        if(suit[i]){
+          tmpBuffer += 1;
+        }
+      }
+      // If temp buffer is greater than 5, it is possible for a Straight to exist
+      if(tmpBuffer >= 5){
         return true;
       }
     }
-    System.out.println("Flush Not Possible");
+    // If no suit has a Straight
     return false;
   }
 
-  public boolean straight(int freeCards, boolean faces[]){
-    int streak = 0;
-    int buffer = freeCards;
-
-    for(boolean i : faces){
-
-      if(i){
-        streak++;
-      } else {
-        if(buffer > 0){
+  // Checks if every suit has a Straight on any kind
+  public boolean straightFlush(boolean cards[][], int buffer){
+    // Checks every suit in the deck
+    for(boolean suit[] : cards){
+      // Buffer of cards that the straight doesn't have to cover to possibly exist.
+      int tmpBuffer = buffer;
+      // Represents the current streak of cards dealt
+      int streak = 0;
+      for(int i = 0; i < 15; i++){
+        if(suit[i]){
+          // if card exists in deck streak continues
           streak++;
-          buffer--;
         } else {
-          streak = 0;
-          buffer = freeCards;
+          // No buffer remaining
+          if(tmpBuffer == 0){
+            // Resets streak
+            streak = 0;
+            // Resets Buffer
+            tmpBuffer = buffer;
+            continue;
+          } else {
+            // Keeps streak alive
+            streak++;
+            // Takes away from buffer because streak was incrmented
+            tmpBuffer--;
+          }
+        }
+        // if a streak of 5 has been achieved, a straight could exist.
+        if(streak == 5){ // Might be able to improve this if (streak + tmpBuffer) >= 5
+          return true;
+        }
+      }
+    }
+    // If no suit has a straight
+    return false;
+  }
+
+  // Checks if every suit has a flush
+  public boolean flush(boolean cards[][], int buffer){
+    // Checks every suit
+    for(boolean suit[] : cards){
+      // number of cards in this suit that has been dealt
+      int count = 0;
+      // Iterates over every card in suit. NOTE: Excludes high ace
+      for(int i = 0; i < 14; i++){
+        // If card has been dealt
+        if(suit[i]){
+          // Increments count
+          count++;
         }
       }
 
-      if(streak > 4){
+      // If count + buffer is enough for a flush
+      if((count + buffer) >= 5){
         return true;
       }
-
     }
-
+    // No flushes Found
     return false;
   }
 
-  public void isStraight(int freeCards, boolean faces[]){
+  // Checks if the dealt cards could have a Straight
+  public boolean straight(boolean cards[][], int buffer){
+    // Buffer of cards that the straight doesn't have to cover to possibly exist.
+    int tmpBuffer = buffer;
+    // Represents the current streak of cards dealt
     int streak = 0;
-    int buffer = freeCards;
 
-    for(boolean i : faces){
-      if(i){
+    // Iterates over every face in deck Ace - King, and High Ace
+    for(int i = 0; i < 15; i++){
+      // If the face of any suit has been dealt
+      if(cards[0][i] || cards[1][i] || cards[2][i] || cards[3][i]){
+        // Streak continues
         streak++;
       } else {
-        if(buffer > 0){
-          streak++;
-          buffer--;
-        } else {
+        // No buffer remaining
+        if(tmpBuffer == 0){
+          // Resets streak
           streak = 0;
-          buffer = freeCards;
+          // Resets Buffer
+          tmpBuffer = buffer;
+          continue;
+        } else {
+          // Keeps streak alive
+          streak++;
+          // Takes away from buffer because streak was incrmented
+          tmpBuffer--;
         }
       }
+      // If streak of 5 has been reached, a straight could exist
+      if(streak >= 5){ // Might be able to improve this if (streak + tmpBuffer) >= 5
+        return true;
+      }
+    }
+    return false;
+  }
 
-      if(streak > 4){
-        // 5 -> Straight: If 5 consecutive face values have 1 or more 5 or more times in a row, the a Straight exists
-        hands[5] = true;
-        break;
+  public void pairAndKinds(boolean cards[][], int buffer){
+    boolean fourKind = false;
+    boolean fullHouse = false;
+    boolean threeKind = false;
+    boolean twoPair = false;
+    boolean pair = false;
+    boolean highCard = true;
+    // Iterates over every face in deck Ace - King NOTE: Excludes High Ace
+    for(int i = 0; i < 14; i++){
+      // temp count for determining the number of the face that has been dealt
+      int tmpCount = (cards[0][i]) ? 1 : 0;
+      tmpCount += (cards[1][i]) ? 1 : 0;
+      tmpCount += (cards[2][i]) ? 1 : 0;
+      tmpCount += (cards[3][i]) ? 1 : 0;
+
+      if((tmpCount + buffer) == 1){
+        highCard = true;
+      } else if((tmpCount + buffer) == 2){
+        fullHouse = threeKind;
+        twoPair = pair;
+        pair = true;
+      } else if((tmpCount + buffer) == 3){
+        fullHouse = pair;
+        twoPair = pair;
+        pair = true;
+        threeKind = true;
+      } else if((tmpCount + buffer) >= 4){
+        fullHouse = pair || threeKind;
+        twoPair = pair;
+        pair = true;
+        threeKind = true;
+        fourKind = true;
       }
 
     }
 
+    hands[2] = fourKind;
+    hands[3] = fullHouse;
+    hands[6] = threeKind;
+    hands[7] = twoPair;
+    hands[8] = pair;
+    hands[9] = highCard;
   }
 
   public void printHands(){
-    System.out.println("Royal Flush -> " + hands[0]);
-    System.out.println("Straight Flush -> " + hands[1]);
-    System.out.println("Four of a Kind -> " + hands[2]);
-    System.out.println("Full House -> " + hands[3]);
-    System.out.println("Flush -> " + hands[4]);
-    System.out.println("Straight -> " + hands[5]);
-    System.out.println("Three of a Kind -> " + hands[6]);
-    System.out.println("Two Pair -> " + hands[7]);
-    System.out.println("Pair -> " + hands[8]);
-    System.out.println("High Card -> " + hands[9]);
+    System.out.println("\tRoyal Flush -> " + hands[0]);
+    System.out.println("\tStraight Flush -> " + hands[1]);
+    System.out.println("\tFour of a Kind -> " + hands[2]);
+    System.out.println("\tFull House -> " + hands[3]);
+    System.out.println("\tFlush -> " + hands[4]);
+    System.out.println("\tStraight -> " + hands[5]);
+    System.out.println("\tThree of a Kind -> " + hands[6]);
+    System.out.println("\tTwo Pair -> " + hands[7]);
+    System.out.println("\tPair -> " + hands[8]);
+    System.out.println("\tHigh Card -> " + hands[9]);
   }
 
 }
