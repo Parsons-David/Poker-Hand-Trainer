@@ -15,3 +15,8 @@ After all three rounds, the user is given a report about the correctness of thei
 - Add support for multiple hands in order to simulate other players.
 
 - Advance mode that prompts user for probabilities for each hand.
+
+
+## Preview
+
+![Image Not Found. Look /img for TrainerPreview.jpg](img/TrainerPreview.jpg "Poker Hand Trainer")
