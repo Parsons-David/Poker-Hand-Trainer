@@ -37,7 +37,7 @@ public class TrainWindow extends JFrame {
     public TrainWindow() {
 
       //adjust size and set layout
-      setPreferredSize (new Dimension (950, 412));
+      this.getContentPane().setPreferredSize (new Dimension (863, 412));
       setLayout (null);
 
       btnState = new JButton("Press to Start");
@@ -130,7 +130,7 @@ public class TrainWindow extends JFrame {
       this.pack();
       this.setVisible(true);
       this.setResizable(true);
-
+      this.getContentPane().setBackground(Color.lightGray);
     }
 }
 

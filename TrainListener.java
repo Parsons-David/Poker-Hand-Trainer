@@ -114,36 +114,36 @@ public class TrainListener implements ActionListener{
     components.btnState.setText("Turn");
 
     System.out.println("FLOP:");
-  }
-
-  public void flopCheck(){
 
     checkHands(2);
     printHands();
+  }
+
+  public void flopCheck(){
 
     components.communityCardIcons.get(3).setIcon(community.get(3).getGraphic());
 
     components.btnState.setText("River");
 
     System.out.println("TURN:");
-  }
-
-  public void turnCheck(){
 
     checkHands(1);
     printHands();
+  }
+
+  public void turnCheck(){
 
     components.communityCardIcons.get(4).setIcon(community.get(4).getGraphic());
 
     components.btnState.setText("Finish");
 
     System.out.println("RIVER:");
-  }
-
-  public void riverCheck(){
 
     checkHands(0);
     printHands();
+  }
+
+  public void riverCheck(){
 
     setUp();
     components.btnState.setText("Press to Start");
