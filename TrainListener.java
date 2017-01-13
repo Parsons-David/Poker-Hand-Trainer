@@ -152,6 +152,12 @@ public class TrainListener implements ActionListener{
   public void checkHands(int freeCards){
     boolean cards[][] = new boolean[4][15];
 
+    for(int i = 0; i < 4; i++){
+      for(int j = 0; j < 15; j++){
+        cards[i][j] = false;
+      }
+    }
+
     for(Card i : hold){
       cards[i.getSuit()][i.getFace() - 1] = true;
     }
@@ -210,10 +216,14 @@ public class TrainListener implements ActionListener{
         } else {
           // No buffer remaining
           if(tmpBuffer == 0){
-            // Resets streak
-            streak = 0;
             // Resets Buffer
             tmpBuffer = buffer;
+            // Resets streak
+            streak = 0;
+            if(tmpBuffer > 0){
+              streak++;
+              tmpBuffer--;
+            }
             continue;
           } else {
             // Keeps streak alive
@@ -269,26 +279,34 @@ public class TrainListener implements ActionListener{
       if(cards[0][i] || cards[1][i] || cards[2][i] || cards[3][i]){
         // Streak continues
         streak++;
+        System.out.print(i);
       } else {
         // No buffer remaining
         if(tmpBuffer == 0){
-          // Resets streak
-          streak = 0;
           // Resets Buffer
           tmpBuffer = buffer;
+          // Resets streak
+          streak = 0;
+          if(tmpBuffer > 0){
+            streak++;
+            tmpBuffer--;
+          }
           continue;
         } else {
           // Keeps streak alive
           streak++;
+          System.out.print(i);
           // Takes away from buffer because streak was incrmented
           tmpBuffer--;
         }
       }
       // If streak of 5 has been reached, a straight could exist
       if(streak >= 5){ // Might be able to improve this if (streak + tmpBuffer) >= 5
+        System.out.println("");
         return true;
       }
     }
+    System.out.println("");
     return false;
   }
 
@@ -307,25 +325,48 @@ public class TrainListener implements ActionListener{
       tmpCount += (cards[2][i]) ? 1 : 0;
       tmpCount += (cards[3][i]) ? 1 : 0;
 
-      if((tmpCount + buffer) == 1){
+      if(tmpCount == 1){
         highCard = true;
-      } else if((tmpCount + buffer) == 2){
-        fullHouse = threeKind;
-        twoPair = pair;
+      } else if(tmpCount == 2){
+        fullHouse = threeKind ? threeKind : fullHouse;
+        twoPair = pair ? pair : twoPair;
         pair = true;
-      } else if((tmpCount + buffer) == 3){
-        fullHouse = pair;
-        twoPair = pair;
+      } else if(tmpCount == 3){
+        fullHouse = (pair || threeKind) ? true : fullHouse;
+        twoPair = pair ? pair : twoPair;
         pair = true;
         threeKind = true;
-      } else if((tmpCount + buffer) >= 4){
-        fullHouse = pair || threeKind;
-        twoPair = pair;
+      } else if(tmpCount >= 4){
+        fullHouse = (pair || threeKind) ? true : fullHouse;
+        twoPair = pair ? pair : twoPair;
         pair = true;
         threeKind = true;
         fourKind = true;
       }
 
+    }
+
+
+    while (buffer > 0){
+      if(!pair){
+        pair = true;
+      } else {
+        if(!twoPair){
+          twoPair = true;
+        } else {
+          if(!fullHouse){
+            fullHouse = true;
+          }
+        }
+        if(!threeKind){
+          threeKind = true;
+        } else {
+          if(!fourKind){
+            fourKind = true;
+          }
+        }
+      }
+      buffer--;
     }
 
     hands[2] = fourKind;
