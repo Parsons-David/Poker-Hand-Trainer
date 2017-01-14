@@ -1,8 +1,8 @@
 # Compile all Java files into the build folder.
-javac -d build/ClassFiles src/*.java
+javac -d build/ src/*.java
 
 # Enter build directory. *I couldn't get it to run from a higher directory*
-cd build/ClassFiles
+cd build/
 
 # Run Train, which contains the main method for the project.
 java Train

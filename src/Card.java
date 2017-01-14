@@ -16,7 +16,7 @@ public class Card {
   private ImageIcon graphic;
   private boolean faceUp = true;
 
-  String mainDirectory = Paths.get("..").toAbsolutePath().toString().replace("\\","/");
+  String mainDirectory = Paths.get("").toAbsolutePath().toString().replace("\\","/");
 
   // Creates new card
   public Card(int newSuit, int newFace){

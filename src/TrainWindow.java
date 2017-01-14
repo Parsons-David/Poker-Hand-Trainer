@@ -13,7 +13,7 @@ public class TrainWindow extends JFrame {
 
     TrainListener listener;
 
-    String mainDirectory = Paths.get("..").toAbsolutePath().toString().replace("\\","/");
+    String mainDirectory = Paths.get("").toAbsolutePath().toString().replace("\\","/");
 
     // Stores all Components in a Hash Table
 
