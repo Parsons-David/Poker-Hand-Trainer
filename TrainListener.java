@@ -8,10 +8,9 @@ public class TrainListener implements ActionListener{
 
   private TrainWindow components;
 
-  boolean hands[] = new boolean[10];
   Deck dealer = new Deck();
-  ArrayList<Card> hold; // Player Cards
-  ArrayList<Card> community; // Community dealt cards
+  ArrayList<Card> hold, community; // Community and hold (single player) dealt cards
+  boolean[] communityHands, holdHands; // Possible Hands for community and hold
   ArrayList<Integer> values = new ArrayList<>();
 
   public TrainListener(TrainWindow window){
@@ -76,16 +75,15 @@ public class TrainListener implements ActionListener{
     for(int i = 0; i < 2; i++){
       components.playerCardIcons.get(i).setIcon(components.backImage);
     }
+
+    this.communityHands = new boolean[8];
+    this.holdHands = new boolean[8];
   }
 
   public void beginRound(){
 
     hold = new ArrayList<>(2);
     community = new ArrayList<>(5);
-
-    for(int i = 0; i < hands.length; i++){
-      hands[i] = false;
-    }
 
     // Enable Possible Hand Buttons
     for(JButton btn : this.components.playerButtons){
@@ -115,7 +113,8 @@ public class TrainListener implements ActionListener{
 
     System.out.println("FLOP:");
 
-    checkHands(2);
+    this.communityHands = checkHands(4, false);
+    this.holdHands = checkHands(2, true);
     printHands();
   }
 
@@ -127,7 +126,8 @@ public class TrainListener implements ActionListener{
 
     System.out.println("TURN:");
 
-    checkHands(1);
+    this.communityHands = checkHands(3, false);
+    this.holdHands = checkHands(1, true);
     printHands();
   }
 
@@ -139,7 +139,8 @@ public class TrainListener implements ActionListener{
 
     System.out.println("RIVER:");
 
-    checkHands(0);
+    this.communityHands = checkHands(2, false);
+    this.holdHands = checkHands(0, true);
     printHands();
   }
 
@@ -149,20 +150,21 @@ public class TrainListener implements ActionListener{
     components.btnState.setText("Press to Start");
   }
 
-  public void checkHands(int freeCards){
+  public boolean[] checkHands(int freeCards, boolean checkingHold){
+    boolean hands[] = new boolean[10];
     boolean cards[][] = new boolean[4][15];
 
-    for(int i = 0; i < 4; i++){
-      for(int j = 0; j < 15; j++){
-        cards[i][j] = false;
+    if(checkingHold){
+      for(Card i : hold){
+        cards[i.getSuit()][i.getFace() - 1] = true;
       }
-    }
-
-    for(Card i : hold){
-      cards[i.getSuit()][i.getFace() - 1] = true;
-    }
-    for(int i = 0; i < 5 - freeCards; i++){
-      cards[community.get(i).getSuit()][community.get(i).getFace() - 1] = true;
+      for(int i = 0; i < 5 - freeCards; i++){
+        cards[community.get(i).getSuit()][community.get(i).getFace() - 1] = true;
+      }
+    } else {
+      for(int i = 0; i < 7 - freeCards; i++){
+        cards[community.get(i).getSuit()][community.get(i).getFace() - 1] = true;
+      }
     }
     // Sets low and high ace
     for(boolean suit[] : cards){
@@ -175,8 +177,9 @@ public class TrainListener implements ActionListener{
     hands[4] = flush(cards, freeCards);
     hands[5] = straight(cards, freeCards);
 
-    pairAndKinds(cards, freeCards);
+    pairAndKinds(hands, cards, freeCards);
 
+    return hands;
   }
 
   // Checks if a royal Straight is possible
@@ -208,7 +211,7 @@ public class TrainListener implements ActionListener{
     // Checks every suit in the deck
     for(boolean suit[] : cards){
       // i = Ace - 10
-      for(int i = 0; i < 10; i++){
+      for(int i = 0; i < 11; i++){
         // x = i - i+4
         for(int x = 0; x < 5; x++){
           if(suit[i + x]){
@@ -257,7 +260,7 @@ public class TrainListener implements ActionListener{
     // Represents the current streak of cards dealt
     int count = 0;
     // Iterates over every face in deck Ace - 10
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 11; i++){
       // x = i - i+4
       for(int x = 0; x < 5; x++){
         if(cards[0][i + x] || cards[1][i + x] || cards[2][i + x] || cards[3][i + x]){
@@ -267,7 +270,6 @@ public class TrainListener implements ActionListener{
       }
       // if count plus buffer is greater than 5, a straight is possible
       if(count + buffer >= 5){
-        System.out.println(i);
         return true;
       }
       // Resets count
@@ -276,7 +278,7 @@ public class TrainListener implements ActionListener{
     return false;
   }
 
-  public void pairAndKinds(boolean cards[][], int buffer){
+  public void pairAndKinds(boolean hands[], boolean cards[][], int buffer){
     boolean fourKind = false;
     boolean fullHouse = false;
     boolean threeKind = false;
@@ -344,16 +346,29 @@ public class TrainListener implements ActionListener{
   }
 
   public void printHands(){
-    System.out.println("\tRoyal Flush -> " + hands[0]);
-    System.out.println("\tStraight Flush -> " + hands[1]);
-    System.out.println("\tFour of a Kind -> " + hands[2]);
-    System.out.println("\tFull House -> " + hands[3]);
-    System.out.println("\tFlush -> " + hands[4]);
-    System.out.println("\tStraight -> " + hands[5]);
-    System.out.println("\tThree of a Kind -> " + hands[6]);
-    System.out.println("\tTwo Pair -> " + hands[7]);
-    System.out.println("\tPair -> " + hands[8]);
-    System.out.println("\tHigh Card -> " + hands[9]);
+    System.out.println("\tCommunity:");
+    System.out.println("\t\tRoyal Flush -> " + this.communityHands[0]);
+    System.out.println("\t\tStraight Flush -> " + this.communityHands[1]);
+    System.out.println("\t\tFour of a Kind -> " + this.communityHands[2]);
+    System.out.println("\t\tFull House -> " + this.communityHands[3]);
+    System.out.println("\t\tFlush -> " + this.communityHands[4]);
+    System.out.println("\t\tStraight -> " + this.communityHands[5]);
+    System.out.println("\t\tThree of a Kind -> " + this.communityHands[6]);
+    System.out.println("\t\tTwo Pair -> " + this.communityHands[7]);
+    System.out.println("\t\tPair -> " + this.communityHands[8]);
+    System.out.println("\t\tHigh Card -> " + this.communityHands[9]);
+
+    System.out.println("\tHold:");
+    System.out.println("\t\tRoyal Flush -> " + this.holdHands[0]);
+    System.out.println("\t\tStraight Flush -> " + this.holdHands[1]);
+    System.out.println("\t\tFour of a Kind -> " + this.holdHands[2]);
+    System.out.println("\t\tFull House -> " + this.holdHands[3]);
+    System.out.println("\t\tFlush -> " + this.holdHands[4]);
+    System.out.println("\t\tStraight -> " + this.holdHands[5]);
+    System.out.println("\t\tThree of a Kind -> " + this.holdHands[6]);
+    System.out.println("\t\tTwo Pair -> " + this.holdHands[7]);
+    System.out.println("\t\tPair -> " + this.holdHands[8]);
+    System.out.println("\t\tHigh Card -> " + this.holdHands[9]);
   }
 
 }
