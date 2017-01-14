@@ -203,39 +203,25 @@ public class TrainListener implements ActionListener{
 
   // Checks if every suit has a Straight on any kind
   public boolean straightFlush(boolean cards[][], int buffer){
+    // Represents the current streak of cards dealt
+    int count = 0;
     // Checks every suit in the deck
     for(boolean suit[] : cards){
-      // Buffer of cards that the straight doesn't have to cover to possibly exist.
-      int tmpBuffer = buffer;
-      // Represents the current streak of cards dealt
-      int streak = 0;
-      for(int i = 0; i < 15; i++){
-        if(suit[i]){
-          // if card exists in deck streak continues
-          streak++;
-        } else {
-          // No buffer remaining
-          if(tmpBuffer == 0){
-            // Resets Buffer
-            tmpBuffer = buffer;
-            // Resets streak
-            streak = 0;
-            if(tmpBuffer > 0){
-              streak++;
-              tmpBuffer--;
-            }
-            continue;
-          } else {
-            // Keeps streak alive
-            streak++;
-            // Takes away from buffer because streak was incrmented
-            tmpBuffer--;
+      // i = Ace - 10
+      for(int i = 0; i < 10; i++){
+        // x = i - i+4
+        for(int x = 0; x < 5; x++){
+          if(suit[i + x]){
+            // if card exists in hand add to current count
+            count++;
           }
         }
-        // if a streak of 5 has been achieved, a straight could exist.
-        if(streak == 5){ // Might be able to improve this if (streak + tmpBuffer) >= 5
+        // if count plus buffer is greater than 5, a straight is possible
+        if(count + buffer >= 5){
           return true;
         }
+        // Resets count
+        count = 0;
       }
     }
     // If no suit has a straight
@@ -268,45 +254,25 @@ public class TrainListener implements ActionListener{
 
   // Checks if the dealt cards could have a Straight
   public boolean straight(boolean cards[][], int buffer){
-    // Buffer of cards that the straight doesn't have to cover to possibly exist.
-    int tmpBuffer = buffer;
     // Represents the current streak of cards dealt
-    int streak = 0;
-
-    // Iterates over every face in deck Ace - King, and High Ace
-    for(int i = 0; i < 15; i++){
-      // If the face of any suit has been dealt
-      if(cards[0][i] || cards[1][i] || cards[2][i] || cards[3][i]){
-        // Streak continues
-        streak++;
-        System.out.print(i);
-      } else {
-        // No buffer remaining
-        if(tmpBuffer == 0){
-          // Resets Buffer
-          tmpBuffer = buffer;
-          // Resets streak
-          streak = 0;
-          if(tmpBuffer > 0){
-            streak++;
-            tmpBuffer--;
-          }
-          continue;
-        } else {
-          // Keeps streak alive
-          streak++;
-          System.out.print(i);
-          // Takes away from buffer because streak was incrmented
-          tmpBuffer--;
+    int count = 0;
+    // Iterates over every face in deck Ace - 10
+    for(int i = 0; i < 10; i++){
+      // x = i - i+4
+      for(int x = 0; x < 5; x++){
+        if(cards[0][i + x] || cards[1][i + x] || cards[2][i + x] || cards[3][i + x]){
+          // if card of any suit exists in hand add to current count
+          count++;
         }
       }
-      // If streak of 5 has been reached, a straight could exist
-      if(streak >= 5){ // Might be able to improve this if (streak + tmpBuffer) >= 5
-        System.out.println("");
+      // if count plus buffer is greater than 5, a straight is possible
+      if(count + buffer >= 5){
+        System.out.println(i);
         return true;
       }
+      // Resets count
+      count = 0;
     }
-    System.out.println("");
     return false;
   }
 
