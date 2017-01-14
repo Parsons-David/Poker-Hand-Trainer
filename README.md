@@ -1,6 +1,6 @@
-# Poker Hand Trainer
+# Poker Trainer
 
-Poker Hand Trainer is a Java Applet developed by David Parsons.
+Poker Trainer is a Java Applet developed by David Parsons in order to help those new to Poker learn about the different hands and how to recognize them.
 
 The intention of this project is to develop a simple easy to use Applet for learning the different Poker Hands of Classic Texas Hold'em.
 
@@ -10,7 +10,9 @@ After all three rounds, the user is given a report about the correctness of thei
 
 ## Coming Soon - As of January 2017
 
-- GUI for a more intuitive use.
+- Create release version for non-developers (i.e. create jar & start-up guide).
+
+- Create Web Port using JApplet.
 
 - Add support for multiple hands in order to simulate other players.
 
