@@ -88,9 +88,11 @@ public class TrainListener implements ActionListener{
     // Enable Possible Hand Buttons
     for(JButton btn : this.components.playerButtons){
       btn.setEnabled(true);
+      btn.setVisible(true);
     }
     for(JButton btn : this.components.communityButtons){
       btn.setEnabled(true);
+      btn.setVisible(true);
     }
 
     // Deals cards to players
@@ -120,6 +122,8 @@ public class TrainListener implements ActionListener{
 
   public void flopCheck(){
 
+    updateHandButtons();
+
     components.communityCardIcons.get(3).setIcon(community.get(3).getGraphic());
 
     components.btnState.setText("River");
@@ -132,6 +136,8 @@ public class TrainListener implements ActionListener{
   }
 
   public void turnCheck(){
+
+    updateHandButtons();
 
     components.communityCardIcons.get(4).setIcon(community.get(4).getGraphic());
 
@@ -146,8 +152,17 @@ public class TrainListener implements ActionListener{
 
   public void riverCheck(){
 
+    updateHandButtons();
+
     setUp();
     components.btnState.setText("Press to Start");
+  }
+
+  public void updateHandButtons(){
+    for(int i = 0; i < 10; i++){
+      components.playerButtons.get(i).setVisible(holdHands[i]);
+      components.communityButtons.get(i).setVisible(communityHands[i]);
+    }
   }
 
   public boolean[] checkHands(int freeCards, boolean checkingHold){
