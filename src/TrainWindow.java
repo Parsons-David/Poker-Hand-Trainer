@@ -13,7 +13,7 @@ public class TrainWindow extends JFrame {
 
     TrainListener listener;
 
-    String mainDirectory = Paths.get("").toAbsolutePath().toString().replace("\\","/");
+    String mainDirectory = Card.class.getProtectionDomain().getCodeSource().getLocation().getFile();
 
     // Stores all Components in a Hash Table
 
@@ -31,7 +31,7 @@ public class TrainWindow extends JFrame {
     HashMap<String, JLabel> communityCardsIcons = new HashMap<String, JLabel>();
     HashMap<String, JLabel> holdCardsIcons = new HashMap<String, JLabel>();
     JButton btnState;
-    ImageIcon backImage = new ImageIcon(mainDirectory + "/cards/b.gif");
+    ImageIcon backImage = new ImageIcon(mainDirectory + "cards/b.gif");
 
 
     public TrainWindow() {

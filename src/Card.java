@@ -2,6 +2,7 @@ import java.awt.*;
 import java.nio.file.*;
 import java.io.*;
 import javax.swing.*;
+// import java.net.*;
 
 public class Card {
 
@@ -16,7 +17,7 @@ public class Card {
   private ImageIcon graphic;
   private boolean faceUp = true;
 
-  String mainDirectory = Paths.get("").toAbsolutePath().toString().replace("\\","/");
+  String mainDirectory = Card.class.getProtectionDomain().getCodeSource().getLocation().getFile();
 
   // Creates new card
   public Card(int newSuit, int newFace){
@@ -41,7 +42,7 @@ public class Card {
     // // assures that the given graphic exists
     this.graphic = (tf.exists() ? (new ImageIcon(imagePath)) : null);
 
-    // System.out.print(imagePath + " -> ");
+    System.out.print(imagePath);
 
     // if(this.graphic == null){
     //   System.out.println(Integer.toString(newFace) + Integer.toString(newFace) + ".gif Not Found");
