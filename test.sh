@@ -1,3 +1,6 @@
+# Removes old class files
+rm build/*.class
+
 # Compile all Java files into the build folder.
 javac -d build/ src/*.java
 
