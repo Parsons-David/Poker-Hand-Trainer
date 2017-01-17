@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.awt.*;
 import java.nio.file.*;
 import java.io.*;
+import java.awt.Image;
+import javax.imageio.ImageIO;
 
 // Window Subclass
 
@@ -31,10 +33,17 @@ public class TrainWindow extends JFrame {
     HashMap<String, JLabel> communityCardsIcons = new HashMap<String, JLabel>();
     HashMap<String, JLabel> holdCardsIcons = new HashMap<String, JLabel>();
     JButton btnState;
-    ImageIcon backImage = new ImageIcon(mainDirectory + "cards/b.gif");
+    ImageIcon backImage;
 
 
     public TrainWindow() {
+  		try { //try to load the image files
+        backImage = new ImageIcon(ImageIO.read(Train.class.getResourceAsStream("/cards/b.gif")));
+  		} catch (Exception e) {
+  			System.out.println("Image File Read error");
+  		}
+
+      System.out.println(backImage == null);
 
       //adjust size and set layout
       this.getContentPane().setPreferredSize (new Dimension (863, 412));

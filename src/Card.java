@@ -2,6 +2,7 @@ import java.awt.*;
 import java.nio.file.*;
 import java.io.*;
 import javax.swing.*;
+import javax.imageio.ImageIO;
 // import java.net.*;
 
 public class Card {
@@ -17,15 +18,13 @@ public class Card {
   private ImageIcon graphic;
   private boolean faceUp = true;
 
-  String mainDirectory = Card.class.getProtectionDomain().getCodeSource().getLocation().getFile();
-
   // Creates new card
   public Card(int newSuit, int newFace){
     this.suit = newSuit;
     this.face = newFace;
 
     // All card graphics are stored in the cards folder
-    String imagePath = mainDirectory + "/cards/";
+    String imagePath = "/cards/";
 
     // Values 2-10 are represented by their integer value. Values
     imagePath += (this.face < 11 && this.face > 1 ? Integer.toString(newFace) : specialFaces[(newFace - 1) % 9]);
@@ -40,9 +39,12 @@ public class Card {
     File tf = new File(imagePath);
     //
     // // assures that the given graphic exists
-    this.graphic = (tf.exists() ? (new ImageIcon(imagePath)) : null);
-
-    System.out.print(imagePath);
+		try { //try to load the image files
+      this.graphic = new ImageIcon(ImageIO.read(Train.class.getResourceAsStream(imagePath)));
+		} catch (Exception e) {
+      this.graphic = null;
+			System.out.println("Image File Read error: " + imagePath + " not found");
+		}
 
     // if(this.graphic == null){
     //   System.out.println(Integer.toString(newFace) + Integer.toString(newFace) + ".gif Not Found");
