@@ -8,6 +8,10 @@ Users will be shown/dealt the two initial cards that make up their hand. Then du
 
 After all three rounds, the user is given a report about the correctness of their assumptions during the stages.
 
+Click the link below to download the current release. (Link downloads the executable jar). NOTE: Java must be installed in order for the applet to run).
+
+## [Download](https://github.com/Parsons-David/Poker-Trainer/blob/master/PokerTrainer.jar?raw=true)
+
 ## Coming Soon - As of January 2017
 
 - Create release version for non-developers (i.e. create jar & start-up guide).
