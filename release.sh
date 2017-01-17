@@ -1,5 +1,5 @@
-rm Train.jar
+rm PokerTrainer.jar
 
-jar cvfm Train.jar Manifest.txt -C build .
+jar cvfm PokerTrainer.jar Manifest.txt -C build .
 
-java -jar Train.jar
+java -jar PokerTrainer.jar
