@@ -138,7 +138,7 @@ public class TrainWindow extends JFrame {
       this.setTitle("Poker Hand Trainer");
       this.pack();
       this.setVisible(true);
-      this.setResizable(true);
+      this.setResizable(false);
       this.getContentPane().setBackground(new Color(76, 153, 0));
     }
 }

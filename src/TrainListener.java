@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.awt.event.*;
+import java.awt.Color;
 import javax.swing.*;
 import java.util.Iterator;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.HashMap;
 public class TrainListener implements ActionListener{
 
   private TrainWindow components;
+  private JButton btnColorRat = new JButton(); // extra btn for getting default color
 
   Deck dealer = new Deck();
   ArrayList<Card> hold, community; // Community and hold (single player) dealt cards
@@ -89,10 +91,12 @@ public class TrainListener implements ActionListener{
     for(JButton btn : this.components.playerButtons){
       btn.setEnabled(true);
       btn.setVisible(true);
+      btn.setBackground(btnColorRat.getBackground()); // I know this is bad
     }
     for(JButton btn : this.components.communityButtons){
       btn.setEnabled(true);
       btn.setVisible(true);
+      btn.setBackground(btnColorRat.getBackground()); // I know this is bad
     }
 
     // Deals cards to players
@@ -161,7 +165,13 @@ public class TrainListener implements ActionListener{
   public void updateHandButtons(){
     for(int i = 0; i < 10; i++){
       components.playerButtons.get(i).setVisible(holdHands[i]);
+      if(components.playerButtons.get(i).isVisible()  && (!components.playerButtons.get(i).isEnabled())){
+        components.playerButtons.get(i).setBackground(Color.red);
+      }
       components.communityButtons.get(i).setVisible(communityHands[i]);
+      if(components.communityButtons.get(i).isVisible()  && (!components.communityButtons.get(i).isEnabled())){
+        components.communityButtons.get(i).setBackground(Color.red);
+      }
     }
   }
 
