@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Poker Trainer</string>
+    <string name="state1">Press to Start</string>
+    <string name="state2">Turn</string>
+    <string name="state3">River</string>
+    <string name="state4">Finish</string>
 </resources>
