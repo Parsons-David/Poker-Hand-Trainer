@@ -10,13 +10,13 @@ After all three rounds, the user is given a report about the correctness of thei
 
 Click the link below to download the current release. (Link downloads the executable jar). NOTE: Java must be installed in order for the applet to run).
 
-## [Download](https://github.com/Parsons-David/Poker-Trainer/blob/master/PokerTrainer.jar?raw=true)
+## [Download](https://github.com/Parsons-David/Poker-Trainer/blob/master/Windows/PokerTrainer.jar?raw=true)
 
-## Coming Soon - As of January 2017
+## Coming Soon - As of May 2017
 
 - Create release version for non-developers (i.e. create jar & start-up guide).
 
-- Create Web Port using JApplet.
+- Create Android Port
 
 - Add support for multiple hands in order to simulate other players.
 
@@ -25,4 +25,4 @@ Click the link below to download the current release. (Link downloads the execut
 
 ## Preview
 
-![Image Not Found. Look /img for TrainerPreview.jpg](img/TrainerPreview.jpg "Poker Hand Trainer")
+![Image Not Found. Look /img for TrainerPreview.jpg](Windows/img/TrainerPreview.jpg "Poker Hand Trainer")
