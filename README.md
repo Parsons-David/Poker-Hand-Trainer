@@ -10,6 +10,10 @@ After all three rounds, the user is given a report about the correctness of thei
 
 Click the link below to download the current release. (Link downloads the executable jar). NOTE: Java must be installed in order for the applet to run).
 
+## Windows Verison
+
+![Image Not Found. Look /img for TrainerPreview.jpg](img/TrainerPreview.jpg "Poker Hand Trainer")
+
 ## [Download](https://github.com/Parsons-David/Poker-Trainer/blob/master/Windows/PokerTrainer.jar?raw=true)
 
 ## Coming Soon - As of May 2017
@@ -22,7 +26,7 @@ Click the link below to download the current release. (Link downloads the execut
 
 - Advance mode that prompts user for probabilities for each hand.
 
+## Android Preview
 
-## Preview
+![Image Not Found. Look /img for AndroidPreview.jpg](img/AndroidPreview.jpg "Poker Trainer")
 
-![Image Not Found. Look /img for TrainerPreview.jpg](Windows/img/TrainerPreview.jpg "Poker Hand Trainer")
