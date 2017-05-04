@@ -4,4 +4,6 @@
     <string name="state2">Turn</string>
     <string name="state3">River</string>
     <string name="state4">Finish</string>
+    <string name="yourHands">Pick Your Possible Hands</string>
+    <string name="allHands">Pick All Possible Hands</string>
 </resources>
